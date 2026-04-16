@@ -1,6 +1,6 @@
 # SecureDoc
 
-Hassas kişisel verilerin ve belgelerin güvenli bir şekilde saklanmasını ve paylaşılmasını sağlayan şifreli dijital kasa uygulaması. Üniversite bitirme projesi olarak iki kişilik bir ekip tarafından geliştirilmektedir.
+Hassas kişisel verilerin ve belgelerin güvenli bir şekilde saklanmasını ve paylaşılmasını sağlayan şifreli dijital kasa uygulaması.
 
 ---
 
@@ -301,4 +301,4 @@ Ilk `docker compose build` komutu tum bagimliliklari indirir. Bu islem internet 
 
 ## Lisans
 
-Bu proje universite bitirme projesi olarak gelistirilmektedir. Ticari amacla kullanilmamaktadir.
+Bu proje universite ödevi olarak gelistirilmektedir. Ticari amacla kullanilmamaktadir.
