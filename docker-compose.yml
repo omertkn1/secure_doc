@@ -1,0 +1,22 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount source code for hot-reloading
+      - ./src:/app/src
+      - ./prisma:/app/prisma
+      # Persist SQLite database in a named volume
+      - db-data:/app/data
+      # Prevent host node_modules from overriding container's
+      - /app/node_modules
+    environment:
+      - DATABASE_URL=file:/app/data/dev.db
+      - NEXT_PUBLIC_APP_NAME=SecureDoc
+    restart: unless-stopped
+
+volumes:
+  db-data:

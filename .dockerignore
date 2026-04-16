@@ -1,0 +1,12 @@
+node_modules/
+.next/
+.git/
+.gitignore
+*.md
+*.db
+*.db-journal
+.env
+.env*.local
+.vscode/
+.idea/
+coverage/

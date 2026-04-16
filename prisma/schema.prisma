@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ─── User ────────────────────────────────────────────────────────────
+// Stores identity, authentication hash, and dual RSA key pairs.
+// Phase 1: Only email and passwordHash are actively used.
+// Phase 2+: RSA keys will be generated client-side and stored here.
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+
+  // Authentication (bcrypt hash, populated in Phase 2)
+  passwordHash String @default("")
+
+  // RSA-OAEP key pair for encrypting/decrypting AES document keys
+  encryptionPublicKey           String @default("")
+  encryptedEncryptionPrivateKey String @default("")
+
+  // RSA-PSS key pair for signing/verifying document integrity
+  signingPublicKey           String @default("")
+  encryptedSigningPrivateKey String @default("")
+
+  // Relations
+  documents      Document[]       @relation("OwnerDocs")
+  sentShares     SharedDocument[] @relation("SenderShares")
+  receivedShares SharedDocument[] @relation("ReceiverShares")
+}
+
+// ─── Document ────────────────────────────────────────────────────────
+// An encrypted vault record owned by a single user.
+// All crypto fields are populated starting from Phase 3.
+model Document {
+  id        String   @id @default(uuid())
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  // Classification of the stored data (e.g. 'IBAN', 'CC', 'PHONE')
+  dataType String @default("")
+
+  // AES-256-GCM encrypted payload
+  encryptedData String @default("")
+
+  // IV + Auth Tag stored as JSON string
+  cipherParams String @default("")
+
+  // Document AES key encrypted with owner's RSA-OAEP public key
+  encryptedOwnerKey String @default("")
+
+  // RSA-PSS signature of the data hash
+  signature String @default("")
+
+  // SHA-256 hash of the original plaintext
+  dataHash String @default("")
+
+  // Relations
+  owner      User             @relation("OwnerDocs", fields: [ownerId], references: [id])
+  sharedWith SharedDocument[]
+}
+
+// ─── SharedDocument ──────────────────────────────────────────────────
+// A sharing record: the document's AES key re-encrypted for the receiver.
+// Populated starting from Phase 4.
+model SharedDocument {
+  id         String   @id @default(uuid())
+  documentId String
+  senderId   String
+  receiverId String
+  createdAt  DateTime @default(now())
+
+  // Document AES key encrypted with receiver's RSA-OAEP public key
+  encryptedAesKey String @default("")
+
+  // Relations
+  document Document @relation(fields: [documentId], references: [id])
+  sender   User     @relation("SenderShares", fields: [senderId], references: [id])
+  receiver User     @relation("ReceiverShares", fields: [receiverId], references: [id])
+}
