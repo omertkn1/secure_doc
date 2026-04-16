@@ -236,11 +236,6 @@ docker compose down -v
 | `*.db`, `*.db-journal` | Yerel veritabani dosyalari |
 | `next-env.d.ts` | Next.js tarafindan otomatik olusturulur |
 
-### Sema degisiklikleri
-
-`prisma/schema.prisma` dosyasini degistirmeden once ekip arkadasinizla konusun. Ayni anda iki kisi semada degisiklik yaparsa birlestime catismalari olusabilir.
-
----
 
 ## Sorun Giderme
 
@@ -293,7 +288,6 @@ Ilk `docker compose build` komutu tum bagimliliklari indirir. Bu islem internet 
 - Tailwind veya baska bir CSS framework'u kullanilmaz, yalnizca Vanilla CSS
 - Angular, Vue veya ek UI kutuphaneleri eklenmez
 - Docker-first yaklasim esastir, host tarafinda Node.js gerektirmez
-- Proje kapsamı iki kisilik bir universite bitirme tezi icin uygundur
 - Admin paneli, kullanici rolleri, gercek zamanli sohbet veya dosya yukleme eklenmez
 - Sunucu hicbir zaman duz metin verisi veya sifrelenmemis ozel anahtarlar gormez
 
